@@ -1,0 +1,176 @@
+upstream {{ app_name }}_server {
+    server unix:{{ app_dir }}/{{ app_name }}.sock fail_timeout=0;
+}
+
+# Main server block for the primary domain
+server {
+    listen 80;
+    server_name {{ server_name }} www.{{ server_name }};
+    client_max_body_size 4G;
+
+    access_log {{ app_dir }}/logs/nginx-access.log;
+    error_log {{ app_dir }}/logs/nginx-error.log;
+
+    location /static/ {
+        alias {{ app_dir }}/app/static/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    location /media/ {
+        alias {{ app_dir }}/app/media/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+
+    # Error pages
+    error_page 500 502 503 504 /500.html;
+    location = /500.html {
+        root {{ app_dir }}/app/templates/;
+    }
+}
+
+# API server block
+server {
+    listen 80;
+    server_name api.{{ server_name }};
+    client_max_body_size 4G;
+
+    access_log {{ app_dir }}/logs/nginx-api-access.log;
+    error_log {{ app_dir }}/logs/nginx-api-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+}
+
+# Admin server block
+server {
+    listen 80;
+    server_name admin.{{ server_name }};
+    client_max_body_size 4G;
+
+    access_log {{ app_dir }}/logs/nginx-admin-access.log;
+    error_log {{ app_dir }}/logs/nginx-admin-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+}
+
+{% if use_ssl %}
+# SSL configuration for main domain
+server {
+    listen 443 ssl;
+    server_name {{ server_name }} www.{{ server_name }};
+    client_max_body_size 4G;
+
+    ssl_certificate {{ ssl_cert_path }};
+    ssl_certificate_key {{ ssl_key_path }};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    access_log {{ app_dir }}/logs/nginx-ssl-access.log;
+    error_log {{ app_dir }}/logs/nginx-ssl-error.log;
+
+    location /static/ {
+        alias {{ app_dir }}/app/static/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    location /media/ {
+        alias {{ app_dir }}/app/media/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+}
+
+# SSL configuration for API
+server {
+    listen 443 ssl;
+    server_name api.{{ server_name }};
+    client_max_body_size 4G;
+
+    ssl_certificate {{ ssl_cert_path }};
+    ssl_certificate_key {{ ssl_key_path }};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    access_log {{ app_dir }}/logs/nginx-api-ssl-access.log;
+    error_log {{ app_dir }}/logs/nginx-api-ssl-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+}
+
+# SSL configuration for Admin
+server {
+    listen 443 ssl;
+    server_name admin.{{ server_name }};
+    client_max_body_size 4G;
+
+    ssl_certificate {{ ssl_cert_path }};
+    ssl_certificate_key {{ ssl_key_path }};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    access_log {{ app_dir }}/logs/nginx-admin-ssl-access.log;
+    error_log {{ app_dir }}/logs/nginx-admin-ssl-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://{{ app_name }}_server;
+    }
+}
+{% endif %} 

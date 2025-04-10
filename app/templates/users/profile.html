@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static "images/default-profile.jpg" %}{% endif %}');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 100px 0;
+        margin-bottom: 30px;
+    }
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+    .stats-card {
+        border-left: 4px solid #0d6efd;
+    }
+    .membership-card {
+        border-left: 4px solid #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-header text-center">
+    <div class="container">
+        <div class="mb-4">
+            {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle profile-picture" alt="Profile Picture">
+            {% else %}
+            <img src="{% static 'images/default-profile.jpg' %}" class="rounded-circle profile-picture" alt="Default Profile">
+            {% endif %}
+        </div>
+        <h1 class="display-4">{{ user.get_full_name|default:user.username }}</h1>
+        <p class="lead">{{ user.email }}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Personal Information</h5>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="id_phone_number" name="phone_number" value="{{ user.profile.phone_number }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control" id="id_profile_picture" name="profile_picture">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card stats-card">
+                <div class="card-body">
+                    <h5 class="card-title">Activity Statistics</h5>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <h3>{{ total_bookings }}</h3>
+                            <p class="text-muted">Total Bookings</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h3>{{ upcoming_bookings }}</h3>
+                            <p class="text-muted">Upcoming Classes</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h3>{{ completed_bookings }}</h3>
+                            <p class="text-muted">Completed Classes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card membership-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Membership Information</h5>
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Membership Type:</strong></p>
+                        <span class="badge bg-primary">{{ user.profile.membership_type }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Membership Expiry:</strong></p>
+                        <p>{{ user.profile.membership_expiry|date:"F d, Y" }}</p>
+                    </div>
+                    <a href="{% url 'users:upgrade_membership' %}" class="btn btn-success w-100">Upgrade Membership</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Account Settings</h5>
+                    <div class="list-group">
+                        <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-key"></i> Change Password
+                        </a>
+                        <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-envelope"></i> Email Settings
+                        </a>
+                        <a href="{% url 'users:notification_settings' %}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-bell"></i> Notification Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

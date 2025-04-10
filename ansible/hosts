@@ -1,0 +1,8 @@
+[production]
+146.190.158.14 ansible_user=ubuntu
+
+[staging]
+146.190.158.14 ansible_user=ubuntu
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3 

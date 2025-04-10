@@ -1,0 +1,31 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Ansible
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ansible
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H 146.190.158.14 >> ~/.ssh/known_hosts
+
+    - name: Deploy to Production
+      run: |
+        cd ansible
+        ansible-playbook -i hosts playbook.yml --limit production
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: False 

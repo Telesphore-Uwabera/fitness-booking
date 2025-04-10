@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2>Booking Cancellation</h2>
+    
+    <p>Dear {{ booking.user.get_full_name|default:booking.user.email }},</p>
+    
+    <p>Your booking has been cancelled for the following class:</p>
+    
+    <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <h3>{{ fitness_class.name }}</h3>
+        <p><strong>Date:</strong> {{ class_schedule.date|date:"l, F j, Y" }}</p>
+        <p><strong>Time:</strong> {{ class_schedule.start_time|time:"g:i A" }} - {{ class_schedule.end_time|time:"g:i A" }}</p>
+        <p><strong>Instructor:</strong> {{ fitness_class.instructor }}</p>
+        <p><strong>Location:</strong> {{ fitness_class.location }}</p>
+    </div>
+    
+    {% if booking.cancellation_reason %}
+    <p><strong>Cancellation Reason:</strong> {{ booking.cancellation_reason }}</p>
+    {% endif %}
+    
+    <p>If you would like to book another class, please visit our website.</p>
+    
+    <p>Thank you for your understanding!</p>
+    
+    <div style="margin-top: 30px; color: #666; font-size: 12px;">
+        <p>This is an automated email. Please do not reply to this message.</p>
+    </div>
+</div>
+{% endblock %} 

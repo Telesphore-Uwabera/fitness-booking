@@ -1,0 +1,18 @@
+---
+# Production-specific settings
+server_name: fitnessbooking.com
+debug: false
+
+# Production database settings
+db_password: "fitness_booking_prod_db_2024"
+
+# Production email settings
+email_host_user: admin@fitnessbooking.com
+
+# Production allowed hosts
+allowed_hosts:
+  - "{{ server_name }}"
+  - www.{{ server_name }}
+  - api.{{ server_name }}
+  - admin.{{ server_name }}
+  - 146.190.158.14 

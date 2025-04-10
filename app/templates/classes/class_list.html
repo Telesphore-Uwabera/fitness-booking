@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fitness Classes{% endblock %}
+
+{% block extra_css %}
+<style>
+    .class-card {
+        transition: transform 0.2s;
+        margin-bottom: 20px;
+    }
+    .class-card:hover {
+        transform: translateY(-5px);
+    }
+    .class-image {
+        height: 200px;
+        object-fit: cover;
+    }
+    .badge {
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4">Fitness Classes</h1>
+        <p class="lead">Find and book your favorite fitness classes</p>
+    </div>
+</div>
+
+<div class="row">
+    {% for fitness_class in object_list %}
+    <div class="col-md-4">
+        <div class="card class-card">
+            {% if fitness_class.image %}
+            <img src="{{ fitness_class.image.url }}" class="card-img-top class-image" alt="{{ fitness_class.name }}">
+            {% else %}
+            <img src="{% static 'images/default-class.jpg' %}" class="card-img-top class-image" alt="Default class image">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ fitness_class.name }}</h5>
+                <p class="card-text">{{ fitness_class.description|truncatewords:20 }}</p>
+                <div class="mb-2">
+                    <span class="badge bg-primary">{{ fitness_class.duration }} minutes</span>
+                    <span class="badge bg-info">{{ fitness_class.difficulty_level }}</span>
+                </div>
+                <a href="{% url 'classes:class_detail' fitness_class.id %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col">
+        <div class="alert alert-info">
+            No fitness classes available at the moment.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

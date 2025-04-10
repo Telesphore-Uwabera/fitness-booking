@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app:/app
+    ports:
+      - "8001:8000"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=development-secret-key
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DB_NAME=fitness_booking
+      - DB_USER=fitness_booking
+      - DB_PASSWORD=fitness_booking
+      - DB_HOST=db
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - EMAIL_HOST=mailhog
+      - EMAIL_PORT=1025
+      - EMAIL_USE_TLS=0
+    depends_on:
+      - db
+      - redis
+      - mailhog
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=fitness_booking
+      - POSTGRES_USER=fitness_booking
+      - POSTGRES_PASSWORD=fitness_booking
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:6
+    ports:
+      - "6380:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web interface
+
+volumes:
+  postgres_data: 

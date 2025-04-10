@@ -1,0 +1,11 @@
+[Unit]
+Description=gunicorn socket for {{ app_name }}
+
+[Socket]
+ListenStream={{ app_dir }}/{{ app_name }}.sock
+SocketUser={{ app_user }}
+SocketGroup={{ app_group }}
+SocketMode=660
+
+[Install]
+WantedBy=sockets.target 

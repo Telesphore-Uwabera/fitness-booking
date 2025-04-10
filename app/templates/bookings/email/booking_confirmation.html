@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2>Booking Confirmation</h2>
+    
+    <p>Dear {{ booking.user.get_full_name|default:booking.user.email }},</p>
+    
+    <p>Your booking has been confirmed for the following class:</p>
+    
+    <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <h3>{{ fitness_class.name }}</h3>
+        <p><strong>Date:</strong> {{ class_schedule.date|date:"l, F j, Y" }}</p>
+        <p><strong>Time:</strong> {{ class_schedule.start_time|time:"g:i A" }} - {{ class_schedule.end_time|time:"g:i A" }}</p>
+        <p><strong>Instructor:</strong> {{ fitness_class.instructor }}</p>
+        <p><strong>Location:</strong> {{ fitness_class.location }}</p>
+    </div>
+    
+    <p>Please arrive 10 minutes before the class starts. Don't forget to bring:</p>
+    <ul>
+        <li>Comfortable workout clothes</li>
+        <li>Water bottle</li>
+        <li>Towel</li>
+    </ul>
+    
+    <p>If you need to cancel your booking, please do so at least 24 hours before the class starts.</p>
+    
+    <p>Thank you for choosing our fitness center!</p>
+    
+    <div style="margin-top: 30px; color: #666; font-size: 12px;">
+        <p>This is an automated email. Please do not reply to this message.</p>
+    </div>
+</div>
+{% endblock %} 

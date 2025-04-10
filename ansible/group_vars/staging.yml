@@ -1,0 +1,19 @@
+---
+# Staging-specific settings
+server_name: staging.fitnessbooking.com
+debug: true
+
+# Staging database settings
+db_password: "fitness_booking_staging_db_2024"
+
+# Staging email settings
+email_host_user: staging@fitnessbooking.com
+
+# Staging allowed hosts
+allowed_hosts:
+  - "{{ server_name }}"
+  - localhost
+  - 127.0.0.1
+  - api.staging.fitnessbooking.com
+  - admin.staging.fitnessbooking.com
+  - 146.190.158.14 

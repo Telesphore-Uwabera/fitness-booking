@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ fitness_class.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .class-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% if fitness_class.image %}{{ fitness_class.image.url }}{% else %}{% static "images/default-class.jpg" %}{% endif %}');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 100px 0;
+        margin-bottom: 30px;
+    }
+    .schedule-card {
+        border-left: 4px solid #0d6efd;
+    }
+    .instructor-card {
+        border-left: 4px solid #198754;
+    }
+    .booking-card {
+        border-left: 4px solid #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="class-header text-center">
+    <div class="container">
+        <h1 class="display-4">{{ fitness_class.name }}</h1>
+        <p class="lead">{{ fitness_class.description }}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Class Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Duration:</strong> {{ fitness_class.duration }} minutes</p>
+                            <p><strong>Difficulty Level:</strong> {{ fitness_class.difficulty_level }}</p>
+                            <p><strong>Category:</strong> {{ fitness_class.category }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Equipment Needed:</strong> {{ fitness_class.equipment_needed }}</p>
+                            <p><strong>Max Participants:</strong> {{ fitness_class.max_participants }}</p>
+                            <p><strong>Price:</strong> ${{ fitness_class.price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 schedule-card">
+                <div class="card-body">
+                    <h5 class="card-title">Schedule</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Time</th>
+                                    <th>Instructor</th>
+                                    <th>Available Spots</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for schedule in fitness_class.schedules.all %}
+                                <tr>
+                                    <td>{{ schedule.day }}</td>
+                                    <td>{{ schedule.start_time|time }} - {{ schedule.end_time|time }}</td>
+                                    <td>{{ schedule.instructor }}</td>
+                                    <td>{{ schedule.available_spots }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 instructor-card">
+                <div class="card-body">
+                    <h5 class="card-title">Instructor</h5>
+                    <div class="text-center mb-3">
+                        {% if fitness_class.instructor.profile_picture %}
+                        <img src="{{ fitness_class.instructor.profile_picture.url }}" class="rounded-circle" width="100" height="100" alt="{{ fitness_class.instructor.name }}">
+                        {% else %}
+                        <img src="{% static 'images/default-instructor.jpg' %}" class="rounded-circle" width="100" height="100" alt="Default instructor">
+                        {% endif %}
+                    </div>
+                    <h6>{{ fitness_class.instructor.name }}</h6>
+                    <p>{{ fitness_class.instructor.bio }}</p>
+                    <p><strong>Specialties:</strong> {{ fitness_class.instructor.specialties }}</p>
+                </div>
+            </div>
+
+            <div class="card booking-card">
+                <div class="card-body">
+                    <h5 class="card-title">Book This Class</h5>
+                    {% if user.is_authenticated %}
+                        {% if fitness_class.is_available %}
+                        <form method="post" action="{% url 'bookings:create_booking' fitness_class.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="schedule" class="form-label">Select Schedule</label>
+                                <select class="form-select" id="schedule" name="schedule" required>
+                                    {% for schedule in fitness_class.schedules.all %}
+                                    <option value="{{ schedule.id }}">
+                                        {{ schedule.day }} - {{ schedule.start_time|time }} to {{ schedule.end_time|time }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Book Now</button>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            This class is currently full. Please check back later.
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="alert alert-info">
+                        Please <a href="{% url 'account_login' %}">login</a> to book this class.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

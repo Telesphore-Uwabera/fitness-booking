@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block extra_css %}
+<style>
+    .booking-card {
+        transition: transform 0.2s;
+        margin-bottom: 20px;
+    }
+    .booking-card:hover {
+        transform: translateY(-5px);
+    }
+    .status-badge {
+        font-size: 0.9rem;
+    }
+    .upcoming {
+        border-left: 4px solid #198754;
+    }
+    .completed {
+        border-left: 4px solid #6c757d;
+    }
+    .cancelled {
+        border-left: 4px solid #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4">My Bookings</h1>
+        <p class="lead">Manage your fitness class bookings</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Upcoming Classes</h5>
+                {% for booking in upcoming_bookings %}
+                <div class="card booking-card upcoming mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title mb-1">{{ booking.fitness_class.name }}</h6>
+                                <p class="card-text mb-1">
+                                    <small class="text-muted">
+                                        {{ booking.schedule.day }} | {{ booking.schedule.start_time|time }} - {{ booking.schedule.end_time|time }}
+                                    </small>
+                                </p>
+                                <p class="card-text mb-0">
+                                    <small>Instructor: {{ booking.schedule.instructor }}</small>
+                                </p>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-success status-badge">Upcoming</span>
+                                <div class="mt-2">
+                                    <form method="post" action="{% url 'bookings:cancel_booking' booking.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-info">
+                    You have no upcoming classes booked.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Past Classes</h5>
+                {% for booking in past_bookings %}
+                <div class="card booking-card completed mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title mb-1">{{ booking.fitness_class.name }}</h6>
+                                <p class="card-text mb-1">
+                                    <small class="text-muted">
+                                        {{ booking.schedule.day }} | {{ booking.schedule.start_time|time }} - {{ booking.schedule.end_time|time }}
+                                    </small>
+                                </p>
+                                <p class="card-text mb-0">
+                                    <small>Instructor: {{ booking.schedule.instructor }}</small>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="badge bg-secondary status-badge">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-info">
+                    You have no past class bookings.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Booking Statistics</h5>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Upcoming Classes
+                        <span class="badge bg-primary rounded-pill">{{ upcoming_bookings|length }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Completed Classes
+                        <span class="badge bg-secondary rounded-pill">{{ past_bookings|length }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Bookings
+                        <span class="badge bg-info rounded-pill">{{ total_bookings }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

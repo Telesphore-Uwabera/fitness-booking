@@ -1,0 +1,1 @@
+default_app_config = 'fitness_booking.apps.FitnessBookingConfig' 

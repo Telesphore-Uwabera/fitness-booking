@@ -1,0 +1,51 @@
+---
+# Docker Hub credentials
+docker_hub_token: "{{ lookup('env', 'DOCKER_HUB_TOKEN') }}"
+
+# Application settings
+app_name: "fitness-booking"
+app_user: fitness_booking
+app_group: fitness_booking
+app_dir: "/opt/{{ app_name }}"
+venv_dir: /opt/{{ app_name }}/venv
+
+# Git settings
+git_repo: https://github.com/telesphore-uwabera/fitness_booking.git
+git_branch: main
+
+# Gunicorn settings
+gunicorn_workers: 3
+gunicorn_bind: unix:{{ app_dir }}/{{ app_name }}.sock
+
+# Database settings
+db_name: "fitness_booking"
+db_user: "fitness_booking"
+db_password: "fitness_booking"
+db_host: localhost
+db_port: 5432
+
+# Redis settings
+redis_host: localhost
+redis_port: 6379
+
+# Security settings
+secret_key: "your-secret-key-here"
+debug: false
+
+# Email settings
+email_host: smtp.gmail.com
+email_port: 587
+email_use_tls: true
+email_host_user: your-email@gmail.com
+email_host_password: your-email-password
+
+# Allowed hosts
+allowed_hosts: "['localhost', '127.0.0.1', '146.190.158.14']"
+
+# SSL settings
+use_ssl: true
+ssl_cert_path: /etc/letsencrypt/live/{{ server_name }}/fullchain.pem
+ssl_key_path: /etc/letsencrypt/live/{{ server_name }}/privkey.pem
+
+# Django settings
+django_secret_key: "your-secret-key-here" 
