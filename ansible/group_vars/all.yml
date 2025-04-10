@@ -11,7 +11,7 @@ app_dir: "/opt/{{ app_name }}"
 venv_dir: /opt/{{ app_name }}/venv
 
 # Git settings
-git_repo: https://github.com/telesphore-uwabera/fitness_booking.git
+git_repo: https://github.com/ALU-BSE/devops-challenge-Telesphore-Uwabera.git
 git_branch: main
 
 # Gunicorn settings
