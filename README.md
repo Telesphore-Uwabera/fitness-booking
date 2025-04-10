@@ -108,7 +108,7 @@ REDIS_PORT=6379
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/fitness-booking.git
+   git clone https://github.com/ALU-BSE/devops-challenge-Telesphore-Uwabera.git
    cd fitness-booking
    ```
 
@@ -143,7 +143,7 @@ The application is configured for automated deployment using GitHub Actions and 
 
 ### Required Secrets
 
-Add the following secrets to your GitHub repository:
+Add the following secrets to the GitHub repository:
 
 - `DJANGO_SECRET_KEY`: Django secret key
 - `POSTGRES_PASSWORD`: PostgreSQL password
@@ -176,7 +176,7 @@ The application is deployed to: 146.190.158.14
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
+3. Commit the changes
 4. Push to the branch
 5. Create a Pull Request
 
