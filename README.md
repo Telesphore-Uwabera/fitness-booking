@@ -24,7 +24,7 @@ fitness_booking/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/telesphore-uwabera/fitness_booking.git
+git clone https://github.com/Telesphore-Uwabera/fitness-booking.git
 cd fitness_booking
 ```
 
@@ -41,7 +41,7 @@ docker-compose up --build
 ## Deployment
 
 1. Production Server:
-- IP: 146.190.158.14
+- IP: 64.23.210.235
 - User: ubuntu
 - Ports: 80, 443, 8000
 
@@ -108,7 +108,7 @@ REDIS_PORT=6379
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ALU-BSE/devops-challenge-Telesphore-Uwabera.git
+   git clone https://github.com/Telesphore-Uwabera/fitness-booking.git
    cd fitness-booking
    ```
 
@@ -143,7 +143,7 @@ The application is configured for automated deployment using GitHub Actions and 
 
 ### Required Secrets
 
-Add the following secrets to the GitHub repository:
+Add the following secrets to your GitHub repository:
 
 - `DJANGO_SECRET_KEY`: Django secret key
 - `POSTGRES_PASSWORD`: PostgreSQL password
@@ -162,7 +162,7 @@ Add the following secrets to the GitHub repository:
 
 ## Server Configuration
 
-The application is deployed to: 146.190.158.14
+The application is deployed to: 64.23.210.235
 
 ### Port Configuration
 
@@ -176,7 +176,7 @@ The application is deployed to: 146.190.158.14
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit the changes
+3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
 
