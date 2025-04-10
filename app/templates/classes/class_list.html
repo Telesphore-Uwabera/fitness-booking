@@ -31,7 +31,7 @@
 </div>
 
 <div class="row">
-    {% for fitness_class in object_list %}
+    {% for fitness_class in classes %}
     <div class="col-md-4">
         <div class="card class-card">
             {% if fitness_class.image %}
@@ -41,12 +41,16 @@
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ fitness_class.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Instructor: {{ fitness_class.instructor }}</h6>
                 <p class="card-text">{{ fitness_class.description|truncatewords:20 }}</p>
                 <div class="mb-2">
-                    <span class="badge bg-primary">{{ fitness_class.duration }} minutes</span>
-                    <span class="badge bg-info">{{ fitness_class.difficulty_level }}</span>
+                    <span class="badge bg-primary">{{ fitness_class.duration }}</span>
+                    <span class="badge bg-success">${{ fitness_class.price }}</span>
+                    <span class="badge bg-info">{{ fitness_class.capacity }} spots</span>
                 </div>
-                <a href="{% url 'classes:class_detail' fitness_class.id %}" class="btn btn-primary">View Details</a>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'classes:class_detail' fitness_class.id %}" class="btn btn-primary">View Details & Book</a>
+                </div>
             </div>
         </div>
     </div>

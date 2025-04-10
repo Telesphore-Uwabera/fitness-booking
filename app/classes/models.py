@@ -17,6 +17,15 @@ class FitnessClass(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def is_available(self):
+        # Check if any schedule for this class has available spots
+        return self.schedules.filter(
+            end_time__gt=timezone.now(),
+            is_cancelled=False,
+            available_spots__gt=0
+        ).exists()
+
 class ClassSchedule(models.Model):
     fitness_class = models.ForeignKey(FitnessClass, on_delete=models.CASCADE, related_name='schedules')
     start_time = models.DateTimeField()

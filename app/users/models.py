@@ -22,6 +22,13 @@ class UserProfile(models.Model):
     )
     membership_start_date = models.DateField(null=True, blank=True)
     membership_end_date = models.DateField(null=True, blank=True)
+    
+    # Notification preferences
+    email_notifications = models.BooleanField(default=True)
+    sms_notifications = models.BooleanField(default=False)
+    booking_reminders = models.BooleanField(default=True)
+    promotional_emails = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

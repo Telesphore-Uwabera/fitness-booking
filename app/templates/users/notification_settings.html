@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notification Settings{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Notification Preferences</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="email_notifications" 
+                                       name="email_notifications" {% if user.profile.email_notifications %}checked{% endif %}>
+                                <label class="form-check-label" for="email_notifications">
+                                    Email Notifications
+                                </label>
+                                <small class="form-text text-muted d-block">Receive important updates about your bookings via email</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="sms_notifications" 
+                                       name="sms_notifications" {% if user.profile.sms_notifications %}checked{% endif %}>
+                                <label class="form-check-label" for="sms_notifications">
+                                    SMS Notifications
+                                </label>
+                                <small class="form-text text-muted d-block">Get instant updates about your classes via SMS</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="booking_reminders" 
+                                       name="booking_reminders" {% if user.profile.booking_reminders %}checked{% endif %}>
+                                <label class="form-check-label" for="booking_reminders">
+                                    Booking Reminders
+                                </label>
+                                <small class="form-text text-muted d-block">Receive reminders before your scheduled classes</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="promotional_emails" 
+                                       name="promotional_emails" {% if user.profile.promotional_emails %}checked{% endif %}>
+                                <label class="form-check-label" for="promotional_emails">
+                                    Promotional Emails
+                                </label>
+                                <small class="form-text text-muted d-block">Stay updated about special offers and new classes</small>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Save Preferences</button>
+                            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

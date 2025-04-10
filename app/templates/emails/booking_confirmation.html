@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Booking Confirmation</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ user_name }},</p>
+            
+            <p>Your booking for {{ class_name }} has been confirmed. Here are the details:</p>
+            
+            <ul>
+                <li><strong>Class:</strong> {{ class_name }}</li>
+                <li><strong>Date:</strong> {{ schedule_date }}</li>
+                <li><strong>Time:</strong> {{ start_time }} - {{ end_time }}</li>
+                <li><strong>Instructor:</strong> {{ instructor }}</li>
+                <li><strong>Location:</strong> Main Fitness Studio</li>
+            </ul>
+            
+            <p>Please arrive 10 minutes before the class starts. Don't forget to bring:</p>
+            <ul>
+                <li>Comfortable workout clothes</li>
+                <li>Water bottle</li>
+                <li>Towel</li>
+                {% if equipment_needed %}
+                <li>{{ equipment_needed }}</li>
+                {% endif %}
+            </ul>
+            
+            <p>If you need to cancel your booking, please do so at least 24 hours before the class starts.</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for choosing our fitness center!</p>
+        </div>
+    </div>
+</body>
+</html> 

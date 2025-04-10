@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upgrade Membership{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Choose Your Membership Plan</h1>
+    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <!-- Regular Membership -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Regular</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$29.99/month</h6>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>✓ Access to basic classes</li>
+                        <li>✓ Standard booking window</li>
+                        <li>✓ Basic equipment access</li>
+                    </ul>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="membership_type" value="regular">
+                        <button type="submit" class="btn btn-outline-primary w-100">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Membership -->
+        <div class="col">
+            <div class="card h-100 border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Premium</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$49.99/month</h6>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>✓ Access to all classes</li>
+                        <li>✓ Priority booking</li>
+                        <li>✓ Full equipment access</li>
+                        <li>✓ Personal trainer consultation</li>
+                    </ul>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="membership_type" value="premium">
+                        <button type="submit" class="btn btn-primary w-100">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Membership -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Student</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$24.99/month</h6>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>✓ Access to basic classes</li>
+                        <li>✓ Student-only classes</li>
+                        <li>✓ Valid student ID required</li>
+                    </ul>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="membership_type" value="student">
+                        <button type="submit" class="btn btn-outline-primary w-100">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Senior Membership -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Senior</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$19.99/month</h6>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>✓ Access to senior classes</li>
+                        <li>✓ Modified equipment access</li>
+                        <li>✓ Age 65+ required</li>
+                    </ul>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="membership_type" value="senior">
+                        <button type="submit" class="btn btn-outline-primary w-100">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

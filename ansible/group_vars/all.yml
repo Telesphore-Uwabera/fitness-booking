@@ -1,11 +1,12 @@
 ---
 # Docker Hub credentials
+docker_hub_username: "{{ lookup('env', 'DOCKER_HUB_USERNAME') }}"
 docker_hub_token: "{{ lookup('env', 'DOCKER_HUB_TOKEN') }}"
 
 # Application settings
-app_name: "fitness-booking"
-app_user: fitness_booking
-app_group: fitness_booking
+app_name: "fitness-booking-telesphoreuwabera"
+app_user: "fitness_booking"
+app_group: "fitness_booking"
 app_dir: "/opt/{{ app_name }}"
 venv_dir: /opt/{{ app_name }}/venv
 
@@ -20,32 +21,45 @@ gunicorn_bind: unix:{{ app_dir }}/{{ app_name }}.sock
 # Database settings
 db_name: "fitness_booking"
 db_user: "fitness_booking"
-db_password: "fitness_booking"
-db_host: localhost
-db_port: 5432
+db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+db_host: "db"
+db_port: 5433
 
 # Redis settings
-redis_host: localhost
-redis_port: 6379
+redis_host: "redis"
+redis_port: 6380
 
 # Security settings
-secret_key: "your-secret-key-here"
+django_secret_key: "{{ lookup('env', 'DJANGO_SECRET_KEY') }}"
 debug: false
 
 # Email settings
-email_host: smtp.gmail.com
-email_port: 587
-email_use_tls: true
-email_host_user: your-email@gmail.com
-email_host_password: your-email-password
+email_host: "mailhog"
+email_port: 1025
+email_use_tls: false
+email_host_user: ""
+email_host_password: ""
 
-# Allowed hosts
-allowed_hosts: "['localhost', '127.0.0.1', '146.190.158.14']"
+# Server settings
+server_name: "64.23.210.235"
+allowed_hosts: "['localhost', '127.0.0.1', '{{ server_name }}']"
 
 # SSL settings
 use_ssl: true
 ssl_cert_path: /etc/letsencrypt/live/{{ server_name }}/fullchain.pem
 ssl_key_path: /etc/letsencrypt/live/{{ server_name }}/privkey.pem
 
-# Django settings
-django_secret_key: "your-secret-key-here" 
+# Docker settings
+docker_compose_version: "2.17.2"
+docker_network_name: "fitness_booking_network"
+
+# Container ports
+django_port: 9100
+nginx_port: 8500
+mailhog_port: 8100
+db_port: 5433
+redis_port: 6380
+
+# Deployment paths
+docker_compose_file: "docker-compose.prod.yml"
+nginx_conf_file: "nginx.conf" 

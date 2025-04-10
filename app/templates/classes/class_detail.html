@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-6">
                             <p><strong>Equipment Needed:</strong> {{ fitness_class.equipment_needed }}</p>
-                            <p><strong>Max Participants:</strong> {{ fitness_class.max_participants }}</p>
+                            <p><strong>Max Participants:</strong> {{ fitness_class.capacity }}</p>
                             <p><strong>Price:</strong> ${{ fitness_class.price }}</p>
                         </div>
                     </div>
@@ -68,12 +68,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for schedule in fitness_class.schedules.all %}
+                                {% for schedule in schedules %}
                                 <tr>
-                                    <td>{{ schedule.day }}</td>
+                                    <td>{{ schedule.start_time|date:"l" }}</td>
                                     <td>{{ schedule.start_time|time }} - {{ schedule.end_time|time }}</td>
-                                    <td>{{ schedule.instructor }}</td>
+                                    <td>{{ fitness_class.instructor }}</td>
                                     <td>{{ schedule.available_spots }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No available schedules at this time.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -104,15 +108,16 @@
                 <div class="card-body">
                     <h5 class="card-title">Book This Class</h5>
                     {% if user.is_authenticated %}
-                        {% if fitness_class.is_available %}
-                        <form method="post" action="{% url 'bookings:create_booking' fitness_class.id %}">
+                        {% if has_available_spots %}
+                        <form method="post" action="{% url 'classes:book_class' schedules.first.id %}">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="schedule" class="form-label">Select Schedule</label>
-                                <select class="form-select" id="schedule" name="schedule" required>
-                                    {% for schedule in fitness_class.schedules.all %}
+                                <select class="form-select" id="schedule" name="schedule_id" required>
+                                    {% for schedule in schedules %}
                                     <option value="{{ schedule.id }}">
-                                        {{ schedule.day }} - {{ schedule.start_time|time }} to {{ schedule.end_time|time }}
+                                        {{ schedule.start_time|date:"l" }} - {{ schedule.start_time|time }} to {{ schedule.end_time|time }}
+                                        ({{ schedule.available_spots }} spots)
                                     </option>
                                     {% endfor %}
                                 </select>
