@@ -5,19 +5,19 @@ A Django-based fitness booking system with Docker, GitHub Actions, and Ansible d
 ## Project Structure
 ```
 fitness_booking/
-├── app/                    # Django application
-│   ├── Dockerfile         # Docker configuration
-│   ├── requirements.txt   # Python dependencies
-│   └── fitness_booking/   # Django project
-├── docker-compose.yml     # Docker Compose configuration
-├── .github/               # GitHub Actions workflows
+├── app/                   
+│   ├── Dockerfile        
+│   ├── requirements.txt   
+│   └── fitness_booking/   
+├── docker-compose.yml     
+├── .github/               
 │   └── workflows/
-│       ├── ci.yml        # Continuous Integration
-│       └── cd.yml        # Continuous Deployment
-└── ansible/              # Ansible deployment
-    ├── playbook.yml      # Main playbook
-    ├── hosts            # Inventory
-    └── group_vars/      # Environment variables
+│       ├── ci.yml       
+│       └── cd.yml       
+└── ansible/             
+    ├── playbook.yml      
+    ├── hosts            
+    └── group_vars/     
 ```
 
 ## Local Development
@@ -62,11 +62,11 @@ ansible-playbook -i ansible/hosts ansible/playbook.yml --limit production
 Create a `.env` file in the app directory:
 ```env
 DEBUG=True
-SECRET_KEY=your-secret-key
+SECRET_KEY=secret-key
 ALLOWED_HOSTS=localhost,127.0.0.1
 DB_NAME=fitness_booking
 DB_USER=fitness_booking
-DB_PASSWORD=your-db-password
+DB_PASSWORD=db-password
 DB_HOST=db
 DB_PORT=5432
 REDIS_HOST=redis
@@ -115,9 +115,9 @@ REDIS_PORT=6379
 2. Create a `.env` file in the root directory with the following variables:
    ```
    DEBUG=True
-   DJANGO_SECRET_KEY=your-secret-key
+   DJANGO_SECRET_KEY=secret-key
    ALLOWED_HOSTS=localhost,127.0.0.1
-   POSTGRES_PASSWORD=your-db-password
+   POSTGRES_PASSWORD=db-password
    ```
 
 3. Build and start the containers:
